@@ -42,6 +42,7 @@
     transition:background-color .4s ease,color .4s ease;
   }
   a{text-decoration:none;color:inherit}
+  @media(prefers-reduced-motion:no-preference){ html{scroll-behavior:smooth} }
   .hov-accent{transition:color .22s ease}
   .hov-accent:hover{color:var(--accent)}
   .btn-accent{transition:filter .2s ease,transform .2s ease,box-shadow .2s ease}
@@ -542,6 +543,22 @@ if(!reduce){
   const poll=setInterval(()=>{check();if(!pR.size&&!pB.size&&!pC.size)clearInterval(poll);},140);
   setTimeout(check,60);
 }
+
+const navLinks=Array.from(document.querySelectorAll('nav.nav-links a[href^="#"]'));
+const navTargets=navLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+function setActiveNav(link){
+  navLinks.forEach(a=>{ a.style.color=(a===link)?'var(--ink)':'var(--muted)'; a.style.fontWeight=(a===link)?'700':'600'; });
+}
+if(navTargets.length){
+  const spy=new IntersectionObserver(entries=>{
+    let best=null;
+    entries.forEach(e=>{ if(e.isIntersecting && (!best||e.boundingClientRect.top<best.boundingClientRect.top)) best=e; });
+    if(best){ const i=navTargets.indexOf(best.target); if(i>=0) setActiveNav(navLinks[i]); }
+  },{rootMargin:'-40% 0px -55% 0px',threshold:0});
+  navTargets.forEach(t=>spy.observe(t));
+}
+navLinks.forEach(a=>a.addEventListener('click',()=>setActiveNav(a)));
+
 applyLang(detectLang());
 </script>
 </body>
