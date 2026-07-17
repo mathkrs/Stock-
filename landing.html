@@ -41,12 +41,6 @@
     font-family:'Space Grotesk',system-ui,sans-serif;color:var(--ink);min-height:100vh;
     transition:background-color .4s ease,color .4s ease;
   }
-  .page[data-theme="jour"]{
-    background-color:#e9edf6;
-    --bg:#e9edf6;--navbg:#f5f7fc;--panel:#f7f9fd;--surf:#f4f6fb;--sectionAlt:#dfe5f0;
-    --ink:#1f2a44;--muted:#5d6a87;--line:#d4ddec;
-    --accent:#3f6fe0;--accent2:#3f6fe0;--hero:#3f6fe0;--amber:#c5841f;--green:#1f9d63;--red:#d9534f;--btn:#fff;
-  }
   a{text-decoration:none;color:inherit}
   .hov-accent{transition:color .22s ease}
   .hov-accent:hover{color:var(--accent)}
@@ -74,12 +68,8 @@
 </head>
 <body>
 <a href="#main" class="skip-link" data-i18n="skipLink">Saltar al contenido</a>
-<div class="page" data-theme="slate" id="page" style="font-family:'Space Grotesk',system-ui,sans-serif">
+<div class="page" id="page" style="font-family:'Space Grotesk',system-ui,sans-serif">
   <span id="top"></span>
-
-  <button onclick="toggleTheme()" style="position:fixed;bottom:20px;right:20px;z-index:50;display:inline-flex;align-items:center;gap:8px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'Space Grotesk',sans-serif;cursor:pointer;box-shadow:0 16px 34px -14px rgba(10,16,32,.55)">
-    <span style="width:13px;height:13px;border-radius:50%;background:linear-gradient(90deg,var(--accent) 50%,#e6ebf5 50%);display:inline-block;border:1px solid var(--line)"></span><span id="themePrefix">Tema · </span><b style="font-weight:700" id="themeName">Slate clair</b>
-  </button>
 
   <div id="announce" style="position:relative;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;padding:9px 40px;font-size:13px;font-weight:600">
     <span data-i18n="k0">Nuevo · Alertas automáticas de stock bajo, ya disponibles</span>
@@ -395,8 +385,6 @@ const SEO={
   en:{title:'stock α — Clear, simple inventory control for your business',desc:'stock is the simple inventory and point-of-sale software for your business: automatic low-stock alerts, sales that update inventory instantly, barcode scanning and a lifetime license with no monthly fees.'},
   fr:{title:'stock α — Contrôle d’inventaire clair et simple pour votre commerce',desc:'stock est le logiciel simple d’inventaire et de point de vente pour votre commerce : alertes automatiques de stock bas, ventes qui mettent à jour l’inventaire à l’instant, scan de codes-barres et licence à vie sans abonnement.'}
 };
-const THEME_PREFIX={es:'Tema · ',en:'Theme · ',fr:'Thème · '};
-const THEME_LABEL={es:{slate:'Slate clair',jour:'Jour bleu'},en:{slate:'Dark',jour:'Light'},fr:{slate:'Sombre',jour:'Clair'}};
 function applyLang(lang){
   curLang=lang;
   document.documentElement.lang=lang;
@@ -415,12 +403,6 @@ function applyLang(lang){
   });
   // FAQ
   if(typeof FAQ_ALL!=='undefined'){ FAQ=FAQ_ALL[lang]||FAQ_ALL.es; if(typeof renderFaq==='function') renderFaq(); }
-  // theme toggle label
-  const tn=document.getElementById('themeName');
-  if(tn){ const th=document.getElementById('page').getAttribute('data-theme'); 
-    const tt=document.querySelector('button[onclick="toggleTheme()"]');
-    tn.textContent=THEME_LABEL[lang][th]; }
-  const tp=document.getElementById('themePrefix'); if(tp){ tp.textContent=THEME_PREFIX[lang]; }
   // SEO / meta tags
   if(SEO[lang]){
     document.title=SEO[lang].title;
@@ -455,15 +437,6 @@ function detectLang(){
   return 'es';
 }
 
-function toggleTheme(){
-  const p=document.getElementById('page');
-  const next=p.getAttribute('data-theme')==='slate'?'jour':'slate';
-  p.setAttribute('data-theme',next);
-  const tn=document.getElementById('themeName');
-  if(tn && typeof THEME_LABEL!=='undefined'){ tn.textContent=THEME_LABEL[curLang][next]; }
-  try{localStorage.setItem('sa_theme',next);}catch(e){}
-}
-try{const t=localStorage.getItem('sa_theme');if(t){document.getElementById('page').setAttribute('data-theme',t);document.getElementById('themeName').textContent=t==='slate'?'Slate clair':'Jour bleu';}}catch(e){}
 
 const FAQ_ALL={
  es:[
@@ -503,14 +476,30 @@ function renderFaq(){
     return '<div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden">'+
       '<button type="button" onclick="toggleFaq('+i+')" id="faq-btn-'+i+'" aria-expanded="'+open+'" aria-controls="faq-panel-'+i+'" style="appearance:none;-webkit-appearance:none;background:none;border:0;font:inherit;width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;cursor:pointer">'+
         '<span style="font-size:16px;font-weight:600;color:var(--ink)">'+f[0]+'</span>'+
-        '<span aria-hidden="true" style="font-size:24px;font-weight:300;color:var(--accent);line-height:1;flex:none;transition:transform .5s cubic-bezier(.25,.8,.25,1);transform:'+(open?'rotate(45deg)':'rotate(0deg)')+'">+</span>'+
+        '<span class="faq-icon" aria-hidden="true" style="font-size:24px;font-weight:300;color:var(--accent);line-height:1;flex:none;transition:transform .45s cubic-bezier(.22,.61,.36,1);transform:'+(open?'rotate(45deg)':'rotate(0deg)')+'">+</span>'+
       '</button>'+
-      '<div id="faq-panel-'+i+'" role="region" aria-labelledby="faq-btn-'+i+'" style="display:grid;grid-template-rows:'+(open?'1fr':'0fr')+';transition:grid-template-rows .55s cubic-bezier(.25,.8,.25,1)">'+
-        '<div style="overflow:hidden"><div style="padding:0 20px 18px;font-size:14px;line-height:1.6;color:var(--muted);opacity:'+(open?1:0)+';transition:opacity .45s ease .1s">'+f[1]+'</div></div>'+
+      '<div class="faq-panel" id="faq-panel-'+i+'" role="region" aria-labelledby="faq-btn-'+i+'" style="display:grid;grid-template-rows:'+(open?'1fr':'0fr')+';transition:grid-template-rows .4s cubic-bezier(.22,.61,.36,1)">'+
+        '<div style="overflow:hidden"><div class="faq-answer" style="padding:0 20px 18px;font-size:14px;line-height:1.6;color:var(--muted);opacity:'+(open?1:0)+';transition:opacity .3s ease'+(open?' .12s':'')+'">'+f[1]+'</div></div>'+
       '</div></div>';
   }).join('');
 }
-function toggleFaq(i){ faqOpen=(faqOpen===i?-1:i); renderFaq(); }
+function setFaqPanelState(i,open){
+  const btn=document.getElementById('faq-btn-'+i);
+  const panel=document.getElementById('faq-panel-'+i);
+  if(!btn||!panel) return;
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  const icon=btn.querySelector('.faq-icon');
+  if(icon) icon.style.transform=open?'rotate(45deg)':'rotate(0deg)';
+  panel.style.gridTemplateRows=open?'1fr':'0fr';
+  const answer=panel.querySelector('.faq-answer');
+  if(answer){ answer.style.opacity=open?'1':'0'; answer.style.transitionDelay=open?'.12s':'0s'; }
+}
+function toggleFaq(i){
+  const prev=faqOpen;
+  faqOpen=(faqOpen===i?-1:i);
+  if(prev>=0) setFaqPanelState(prev,false);
+  if(faqOpen>=0) setFaqPanelState(faqOpen,true);
+}
 renderFaq();
 
 const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
