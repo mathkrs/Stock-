@@ -4,13 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#3a4866">
-<title>stock α — Control de inventario claro y simple para su comercio</title>
+<title id="pageTitle">stock α — Control de inventario claro y simple para su comercio</title>
+<meta id="metaDesc" name="description" content="stock es el software simple de inventario y punto de venta para su comercio: alertas automáticas de stock bajo, ventas que descuentan el inventario al instante, escaneo de código de barras y licencia de por vida sin mensualidades.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="stock">
+<meta id="ogTitle" property="og:title" content="stock α — Control de inventario claro y simple para su comercio">
+<meta id="ogDesc" property="og:description" content="stock es el software simple de inventario y punto de venta para su comercio: alertas automáticas de stock bajo, ventas que descuentan el inventario al instante, escaneo de código de barras y licencia de por vida sin mensualidades.">
+<meta property="og:locale" content="es_CL">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<meta id="twTitle" name="twitter:title" content="stock α — Control de inventario claro y simple para su comercio">
+<meta id="twDesc" name="twitter:description" content="stock es el software simple de inventario y punto de venta para su comercio: alertas automáticas de stock bajo, ventas que descuentan el inventario al instante, escaneo de código de barras y licencia de por vida sin mensualidades.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235b86e8'/%3E%3Cstop offset='1' stop-color='%232f5fd0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='44' height='44' rx='12' fill='url(%23g)'/%3E%3Ctext x='22' y='31' font-family='Sora,sans-serif' font-size='27' font-weight='700' fill='%23fff' text-anchor='middle'%3E%CE%B1%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box}
   body{margin:0}
+  .skip-link{position:absolute;left:-9999px;top:0;z-index:100;background:#fff;color:#1f2a44;padding:12px 18px;border-radius:0 0 10px 0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;font-size:14px}
+  .skip-link:focus{left:0}
+  [role="button"]:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--accent,#3f6fe0);outline-offset:2px}
   @keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.35}}
   @keyframes saleTicket{0%,10%{opacity:0;transform:translateX(-18px) scale(.96)}18%,42%{opacity:1;transform:translateX(0) scale(1)}52%,100%{opacity:0;transform:translateX(0) scale(.98)}}
   @keyframes flowDash{to{stroke-dashoffset:-22}}
@@ -57,7 +73,9 @@
 </style>
 </head>
 <body>
+<a href="#main" class="skip-link" data-i18n="skipLink">Saltar al contenido</a>
 <div class="page" data-theme="slate" id="page" style="font-family:'Space Grotesk',system-ui,sans-serif">
+  <span id="top"></span>
 
   <button onclick="toggleTheme()" style="position:fixed;bottom:20px;right:20px;z-index:50;display:inline-flex;align-items:center;gap:8px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'Space Grotesk',sans-serif;cursor:pointer;box-shadow:0 16px 34px -14px rgba(10,16,32,.55)">
     <span style="width:13px;height:13px;border-radius:50%;background:linear-gradient(90deg,var(--accent) 50%,#e6ebf5 50%);display:inline-block;border:1px solid var(--line)"></span><span id="themePrefix">Tema · </span><b style="font-weight:700" id="themeName">Slate clair</b>
@@ -65,7 +83,7 @@
 
   <div id="announce" style="position:relative;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;padding:9px 40px;font-size:13px;font-weight:600">
     <span data-i18n="k0">Nuevo · Alertas automáticas de stock bajo, ya disponibles</span>
-    <span onclick="document.getElementById('announce').style.display='none'" style="position:absolute;right:16px;cursor:pointer;font-size:16px;opacity:.85;line-height:1">×</span>
+    <button type="button" onclick="document.getElementById('announce').style.display='none'" data-i18n-aria="closeAnnounce" aria-label="Cerrar aviso" style="position:absolute;right:16px;background:none;border:none;color:inherit;cursor:pointer;font-size:16px;opacity:.85;line-height:1;padding:4px">×</button>
   </div>
 
   <header style="position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--navbg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)">
@@ -83,13 +101,14 @@
         </nav>
       </div>
       <div style="display:flex;align-items:center;gap:14px">
-        <div class="lang-pill" style="display:flex;background:var(--surf);border-radius:999px;padding:3px;border:1px solid var(--line)"><span onclick="setLang('es')" data-lang-btn="es" style="font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;cursor:pointer">ES</span><span onclick="setLang('en')" data-lang-btn="en" style="font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;cursor:pointer">EN</span><span onclick="setLang('fr')" data-lang-btn="fr" style="font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;cursor:pointer">FR</span></div>
-        <span class="hov-accent" onclick="goApp()" style="font-size:14px;font-weight:600;color:var(--ink);cursor:pointer" data-i18n="k5">Iniciar sesión</span>
-        <span class="btn-accent" onclick="goApp()" style="font-size:14px;font-weight:700;color:var(--btn);background:var(--accent);padding:10px 17px;border-radius:10px;cursor:pointer" data-i18n="k6">Comenzar gratis</span>
+        <div class="lang-pill" role="group" aria-label="Idioma" style="display:flex;background:var(--surf);border-radius:999px;padding:3px;border:1px solid var(--line)"><button type="button" onclick="setLang('es')" data-lang-btn="es" lang="es" aria-pressed="true" style="font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;border:none;background:var(--accent);color:var(--btn);font-family:inherit;cursor:pointer">ES</button><button type="button" onclick="setLang('en')" data-lang-btn="en" lang="en" aria-pressed="false" style="font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;border:none;background:transparent;color:var(--muted);font-family:inherit;cursor:pointer">EN</button><button type="button" onclick="setLang('fr')" data-lang-btn="fr" lang="fr" aria-pressed="false" style="font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;border:none;background:transparent;color:var(--muted);font-family:inherit;cursor:pointer">FR</button></div>
+        <button type="button" class="hov-accent" onclick="goApp()" style="appearance:none;-webkit-appearance:none;background:none;border:0;font:inherit;margin:0;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer" data-i18n="k5">Iniciar sesión</button>
+        <button type="button" class="btn-accent" onclick="goApp()" style="appearance:none;-webkit-appearance:none;border:0;font:inherit;margin:0;font-size:14px;font-weight:700;color:var(--btn);background:var(--accent);padding:10px 17px;border-radius:10px;cursor:pointer" data-i18n="k6">Comenzar gratis</button>
       </div>
     </div>
   </header>
 
+  <main id="main">
   <section style="position:relative;overflow:hidden;background:radial-gradient(820px 360px at 82% 14%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 70%)">
     <div style="position:absolute;top:-40px;right:60px;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 30%,transparent),transparent 68%);filter:blur(50px);opacity:.55;pointer-events:none"></div>
     <div class="hero-grid" style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:64px 32px 70px;position:relative;z-index:1">
@@ -98,8 +117,8 @@
         <h1 class="h1-big" style="font-size:58px;line-height:1.02;font-weight:700;letter-spacing:-.03em;margin:0 0 18px;color:var(--ink)"><span data-i18n="h1a">Su inventario,</span><br><span style="color:var(--hero)" data-i18n="h1b">claro y bajo control.</span></h1>
         <p style="font-size:18px;line-height:1.55;color:var(--muted);margin:0 0 30px;max-width:440px" data-i18n="k8">La herramienta simple y profesional para gestionar su stock, recibir alertas y tomar mejores decisiones. Sin hojas de cálculo interminables.</p>
         <div style="display:flex;gap:14px;align-items:center;margin-bottom:18px;flex-wrap:wrap">
-          <span class="btn-accent" onclick="goApp()" style="font-size:16px;font-weight:700;color:var(--btn);background:var(--accent);padding:15px 26px;border-radius:12px;cursor:pointer;box-shadow:0 12px 24px -12px color-mix(in srgb,var(--accent) 65%,transparent)" data-i18n="k6">Comenzar gratis</span>
-          <span class="btn-outline" onclick="goApp()" style="font-size:16px;font-weight:600;color:var(--ink);padding:14px 24px;border:1px solid var(--line);border-radius:12px;cursor:pointer" data-i18n="k9">Ver demo</span>
+          <button type="button" class="btn-accent" onclick="goApp()" style="appearance:none;-webkit-appearance:none;border:0;font:inherit;margin:0;font-size:16px;font-weight:700;color:var(--btn);background:var(--accent);padding:15px 26px;border-radius:12px;cursor:pointer;box-shadow:0 12px 24px -12px color-mix(in srgb,var(--accent) 65%,transparent)" data-i18n="k6">Comenzar gratis</button>
+          <button type="button" class="btn-outline" onclick="goApp()" style="appearance:none;-webkit-appearance:none;background:none;font:inherit;margin:0;font-size:16px;font-weight:600;color:var(--ink);padding:14px 24px;border:1px solid var(--line);border-radius:12px;cursor:pointer" data-i18n="k9">Ver demo</button>
         </div>
         <div style="display:flex;align-items:center;gap:9px;font-size:14px;color:var(--muted)" data-i18n="k10"><span style="width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--green) 22%,transparent);color:var(--green);display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none">✓</span>14 días de prueba gratis — sin tarjeta bancaria</div>
       </div>
@@ -126,12 +145,12 @@
       <h2 style="font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0 auto 10px;color:var(--ink);max-width:620px" data-i18n="k23">Sí, stock es para su negocio</h2>
       <p style="font-size:16px;color:var(--muted);margin:0 auto 32px;max-width:540px" data-i18n="k24">Da igual lo que venda: si tiene productos que entran y salen, stock le ordena el inventario.</p>
       <div style="display:flex;align-items:stretch;gap:16px;flex-wrap:wrap;justify-content:center">
-        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-4.5h15L21 9"></path><path d="M4 9v10h16V9"></path><path d="M9 19v-5h6v5"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k25">Almacén</span></div>
-        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11c0-3 2.5-5 5-5 1.4 0 2.6.5 3.5 1.4C14.6 6.2 16 5.7 17.3 6c2 .5 3.2 2.6 2.6 4.6L17 19a2 2 0 0 1-1.9 1.4H8.3A2 2 0 0 1 6.4 19z"></path><path d="M9 10.5l1.5 7M13 10l1 7.5"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k26">Panadería</span></div>
-        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6a3.5 3.5 0 0 0-4.8 4.3l-5 5a1.6 1.6 0 0 0 2.3 2.3l5-5A3.5 3.5 0 0 0 18 8.2l-2 2-2-2 2-2A3.4 3.4 0 0 0 14.5 6z"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k27">Ferretería</span></div>
-        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"></circle><circle cx="17" cy="20" r="1.3"></circle><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.1a1.5 1.5 0 0 0 1.5-1.2L21 7H6"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k28">Minimarket</span></div>
-        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4v3.5c0 .6.2 1.1.6 1.5l1.8 2c.4.4.6.9.6 1.5V20a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9.5c0-.6.2-1.1.6-1.5l1.8-2c.4-.4.6-.9.6-1.5z"></path><path d="M7 13h10"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k29">Botillería</span></div>
-        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l3 3 3-2 3 2 3-3 1 6-2 1v9H7v-9l-2-1z"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k30">Ropa y tienda</span></div>
+        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg aria-hidden="true" focusable="false" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-4.5h15L21 9"></path><path d="M4 9v10h16V9"></path><path d="M9 19v-5h6v5"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k25">Almacén</span></div>
+        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg aria-hidden="true" focusable="false" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11c0-3 2.5-5 5-5 1.4 0 2.6.5 3.5 1.4C14.6 6.2 16 5.7 17.3 6c2 .5 3.2 2.6 2.6 4.6L17 19a2 2 0 0 1-1.9 1.4H8.3A2 2 0 0 1 6.4 19z"></path><path d="M9 10.5l1.5 7M13 10l1 7.5"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k26">Panadería</span></div>
+        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg aria-hidden="true" focusable="false" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6a3.5 3.5 0 0 0-4.8 4.3l-5 5a1.6 1.6 0 0 0 2.3 2.3l5-5A3.5 3.5 0 0 0 18 8.2l-2 2-2-2 2-2A3.4 3.4 0 0 0 14.5 6z"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k27">Ferretería</span></div>
+        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg aria-hidden="true" focusable="false" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"></circle><circle cx="17" cy="20" r="1.3"></circle><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.1a1.5 1.5 0 0 0 1.5-1.2L21 7H6"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k28">Minimarket</span></div>
+        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg aria-hidden="true" focusable="false" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4v3.5c0 .6.2 1.1.6 1.5l1.8 2c.4.4.6.9.6 1.5V20a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9.5c0-.6.2-1.1.6-1.5l1.8-2c.4-.4.6-.9.6-1.5z"></path><path d="M7 13h10"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k29">Botillería</span></div>
+        <div class="card-lift" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;min-width:130px;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px"><svg aria-hidden="true" focusable="false" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l3 3 3-2 3 2 3-3 1 6-2 1v9H7v-9l-2-1z"></path></svg><span style="font-size:14px;font-weight:600;color:var(--ink)" data-i18n="k30">Ropa y tienda</span></div>
       </div>
     </div>
   </section>
@@ -155,7 +174,7 @@
           <div style="height:1px;background:var(--line);margin:8px 0"></div>
           <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--muted)" data-i18n="k39">Total</span><span style="font-size:13px;font-weight:700;color:var(--ink);font-family:'IBM Plex Mono',monospace">$4.980</span></div>
         </div>
-        <svg width="56" height="24" viewBox="0 0 56 24" fill="none" style="flex:none"><line x1="2" y1="12" x2="46" y2="12" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round" style="animation:flowDash .9s linear infinite"></line><path d="M44 6l8 6-8 6" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <svg aria-hidden="true" focusable="false" width="56" height="24" viewBox="0 0 56 24" fill="none" style="flex:none"><line x1="2" y1="12" x2="46" y2="12" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round" style="animation:flowDash .9s linear infinite"></line><path d="M44 6l8 6-8 6" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         <div style="flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px">
           <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;white-space:nowrap" data-i18n="k18">Café molido 250g</div>
           <div style="height:10px;border-radius:6px;background:color-mix(in srgb,var(--muted) 22%,transparent);overflow:hidden"><div style="height:100%;width:78%;border-radius:6px;background:linear-gradient(90deg,var(--accent2),var(--accent));animation:stockStep 4.2s ease-in-out infinite"></div></div>
@@ -287,7 +306,7 @@
             <div style="display:flex;gap:9px" data-i18n="k93"><span style="color:var(--green);font-weight:800">✓</span>Panel y gráficos básicos</div>
             <div style="display:flex;gap:9px" data-i18n="k94"><span style="color:var(--green);font-weight:800">✓</span>1 usuario</div>
           </div>
-          <span class="btn-outline" onclick="goApp()" style="margin-top:auto;text-align:center;font-size:15px;font-weight:700;color:var(--ink);border:1px solid var(--line);padding:14px;border-radius:11px;cursor:pointer" data-i18n="k95">Empezar gratis</span>
+          <button type="button" class="btn-outline" onclick="goApp()" style="appearance:none;-webkit-appearance:none;background:none;font:inherit;width:100%;margin-top:auto;text-align:center;font-size:15px;font-weight:700;color:var(--ink);border:1px solid var(--line);padding:14px;border-radius:11px;cursor:pointer" data-i18n="k95">Empezar gratis</button>
         </div>
         <div class="card-lift" style="background:var(--panel);border:2px solid var(--accent);border-radius:18px;padding:30px;display:flex;flex-direction:column;position:relative;box-shadow:0 26px 50px -30px color-mix(in srgb,var(--accent) 55%,transparent)">
           <span style="position:absolute;top:-12px;left:30px;font-size:11px;font-weight:700;color:var(--btn);background:var(--accent);padding:4px 11px;border-radius:999px" data-i18n="k96">Recomendado</span>
@@ -302,7 +321,7 @@
             <div style="display:flex;gap:9px" data-i18n="k104"><span style="color:var(--green);font-weight:800">✓</span>Móvil y computadora, sincronizados</div>
             <div style="display:flex;gap:9px" data-i18n="k105"><span style="color:var(--green);font-weight:800">✓</span>Todas las funciones, para siempre</div>
           </div>
-          <span class="btn-accent" onclick="goApp()" style="margin-top:auto;text-align:center;font-size:15px;font-weight:700;color:var(--btn);background:var(--accent);padding:14px;border-radius:11px;cursor:pointer" data-i18n="k106">Obtener la licencia</span>
+          <button type="button" class="btn-accent" onclick="goApp()" style="appearance:none;-webkit-appearance:none;border:0;font:inherit;width:100%;margin-top:auto;text-align:center;font-size:15px;font-weight:700;color:var(--btn);background:var(--accent);padding:14px;border-radius:11px;cursor:pointer" data-i18n="k106">Obtener la licencia</button>
         </div>
       </div>
       <div style="max-width:760px;margin:20px auto 0;background:color-mix(in srgb,var(--green) 12%,transparent);border:1px solid color-mix(in srgb,var(--green) 35%,transparent);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:13px;font-size:14px;color:var(--ink)">
@@ -340,9 +359,10 @@
     <div style="max-width:1180px;margin:0 auto;padding:60px 32px;text-align:center">
       <h2 style="font-size:36px;font-weight:700;letter-spacing:-.02em;margin:0 0 12px;color:#fff" data-i18n="k117">Empiece a controlar su inventario hoy</h2>
       <p style="font-size:17px;color:rgba(255,255,255,.85);margin:0 0 26px" data-i18n="k118">Únase a los comercios que dejaron las hojas de cálculo atrás.</p>
-      <div style="display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap"><span class="btn-accent" onclick="goApp()" style="font-size:16px;font-weight:700;color:var(--accent);background:#fff;padding:15px 28px;border-radius:12px;cursor:pointer" data-i18n="k6">Comenzar gratis</span><span style="font-size:14px;color:rgba(255,255,255,.85)" data-i18n="k119">Gratis para empezar · sin tarjeta bancaria</span></div>
+      <div style="display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap"><button type="button" class="btn-accent" onclick="goApp()" style="appearance:none;-webkit-appearance:none;border:0;font:inherit;font-size:16px;font-weight:700;color:var(--accent);background:#fff;padding:15px 28px;border-radius:12px;cursor:pointer" data-i18n="k6">Comenzar gratis</button><span style="font-size:14px;color:rgba(255,255,255,.85)" data-i18n="k119">Gratis para empezar · sin tarjeta bancaria</span></div>
     </div>
   </section>
+  </main>
 
   <footer style="background:var(--sectionAlt);border-top:1px solid var(--line)">
     <div style="max-width:1180px;margin:0 auto;padding:48px 32px 28px">
@@ -354,7 +374,7 @@
         <div><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px" data-i18n="k121">Producto</div><div style="display:flex;flex-direction:column;gap:9px;font-size:13px;color:var(--muted)"><a href="#funciones" class="hov-accent" style="cursor:pointer" data-i18n="k1">Funciones</a><a href="#precios" class="hov-accent" style="cursor:pointer" data-i18n="k2">Precios</a><a href="#como" class="hov-accent" style="cursor:pointer" data-i18n="k3">Cómo funciona</a></div></div>
         <div><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px" data-i18n="k126">Legal</div><div style="display:flex;flex-direction:column;gap:9px;font-size:13px;color:var(--muted)"><a href="#" class="hov-accent" style="cursor:pointer" data-i18n="k127">Términos</a><a href="privacy.html" class="hov-accent" style="cursor:pointer" data-i18n="k128">Privacidad</a></div></div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:22px;border-top:1px solid var(--line);flex-wrap:wrap;gap:12px"><span style="font-size:13px;color:var(--muted)">© 2026 stock · <span data-i18n="k129">Diseñado en Suiza, hecho para Chile</span> 🇨🇭🇨🇱</span><div style="display:flex;background:var(--panel);border-radius:999px;padding:3px;border:1px solid var(--line)"><span onclick="setLang('es')" data-lang-btn="es" style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer">ES</span><span onclick="setLang('en')" data-lang-btn="en" style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;cursor:pointer">EN</span><span onclick="setLang('fr')" data-lang-btn="fr" style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;cursor:pointer">FR</span></div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:22px;border-top:1px solid var(--line);flex-wrap:wrap;gap:12px"><span style="font-size:13px;color:var(--muted)">© 2026 stock · <span data-i18n="k129">Diseñado en Suiza, hecho para Chile</span> 🇨🇭🇨🇱</span><div role="group" aria-label="Idioma" style="display:flex;background:var(--panel);border-radius:999px;padding:3px;border:1px solid var(--line)"><button type="button" onclick="setLang('es')" data-lang-btn="es" lang="es" aria-pressed="true" style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;border:none;background:var(--accent);color:var(--btn);font-family:inherit;cursor:pointer">ES</button><button type="button" onclick="setLang('en')" data-lang-btn="en" lang="en" aria-pressed="false" style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;border:none;background:transparent;color:var(--muted);font-family:inherit;cursor:pointer">EN</button><button type="button" onclick="setLang('fr')" data-lang-btn="fr" lang="fr" aria-pressed="false" style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;border:none;background:transparent;color:var(--muted);font-family:inherit;cursor:pointer">FR</button></div></div>
     </div>
   </footer>
 
@@ -368,6 +388,13 @@ let curLang='es';
 I18N['h1a']={es:'Su inventario,',en:'Your inventory,',fr:'Votre inventaire,'};
 I18N['h1b']={es:'claro y bajo control.',en:'clear and under control.',fr:'clair et sous contrôle.'};
 I18N['badge1']={es:'Control de stock en tiempo real',en:'Real-time stock control',fr:'Contrôle du stock en temps réel'};
+I18N['skipLink']={es:'Saltar al contenido',en:'Skip to content',fr:'Aller au contenu'};
+I18N['closeAnnounce']={es:'Cerrar aviso',en:'Close notice',fr:'Fermer l’avis'};
+const SEO={
+  es:{title:'stock α — Control de inventario claro y simple para su comercio',desc:'stock es el software simple de inventario y punto de venta para su comercio: alertas automáticas de stock bajo, ventas que descuentan el inventario al instante, escaneo de código de barras y licencia de por vida sin mensualidades.'},
+  en:{title:'stock α — Clear, simple inventory control for your business',desc:'stock is the simple inventory and point-of-sale software for your business: automatic low-stock alerts, sales that update inventory instantly, barcode scanning and a lifetime license with no monthly fees.'},
+  fr:{title:'stock α — Contrôle d’inventaire clair et simple pour votre commerce',desc:'stock est le logiciel simple d’inventaire et de point de vente pour votre commerce : alertes automatiques de stock bas, ventes qui mettent à jour l’inventaire à l’instant, scan de codes-barres et licence à vie sans abonnement.'}
+};
 const THEME_PREFIX={es:'Tema · ',en:'Theme · ',fr:'Thème · '};
 const THEME_LABEL={es:{slate:'Slate clair',jour:'Jour bleu'},en:{slate:'Dark',jour:'Light'},fr:{slate:'Sombre',jour:'Clair'}};
 function applyLang(lang){
@@ -394,9 +421,25 @@ function applyLang(lang){
     const tt=document.querySelector('button[onclick="toggleTheme()"]');
     tn.textContent=THEME_LABEL[lang][th]; }
   const tp=document.getElementById('themePrefix'); if(tp){ tp.textContent=THEME_PREFIX[lang]; }
+  // SEO / meta tags
+  if(SEO[lang]){
+    document.title=SEO[lang].title;
+    ['metaDesc','ogTitle','ogDesc','twTitle','twDesc'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      const attr=el.hasAttribute('content')?'content':null;
+      if(!attr) return;
+      if(id==='metaDesc'||id==='ogDesc'||id==='twDesc') el.setAttribute('content',SEO[lang].desc);
+      else el.setAttribute('content',SEO[lang].title);
+    });
+  }
+  // close-announcement aria-label
+  const closeBtn=document.querySelector('[data-i18n-aria="closeAnnounce"]');
+  if(closeBtn && I18N.closeAnnounce && I18N.closeAnnounce[lang]) closeBtn.setAttribute('aria-label',I18N.closeAnnounce[lang]);
   // lang button active states
   document.querySelectorAll('[data-lang-btn]').forEach(b=>{
     const on=b.getAttribute('data-lang-btn')===lang;
+    b.setAttribute('aria-pressed',on?'true':'false');
     b.style.background=on?'var(--accent)':'transparent';
     b.style.color=on?'var(--btn)':'var(--muted)';
     b.style.fontWeight=on?'700':'600';
@@ -458,11 +501,11 @@ function renderFaq(){
   faqList.innerHTML=FAQ.map((f,i)=>{
     const open=i===faqOpen;
     return '<div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden">'+
-      '<div onclick="toggleFaq('+i+')" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;cursor:pointer">'+
+      '<button type="button" onclick="toggleFaq('+i+')" id="faq-btn-'+i+'" aria-expanded="'+open+'" aria-controls="faq-panel-'+i+'" style="appearance:none;-webkit-appearance:none;background:none;border:0;font:inherit;width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;cursor:pointer">'+
         '<span style="font-size:16px;font-weight:600;color:var(--ink)">'+f[0]+'</span>'+
-        '<span style="font-size:24px;font-weight:300;color:var(--accent);line-height:1;flex:none;transition:transform .5s cubic-bezier(.25,.8,.25,1);transform:'+(open?'rotate(45deg)':'rotate(0deg)')+'">+</span>'+
-      '</div>'+
-      '<div style="display:grid;grid-template-rows:'+(open?'1fr':'0fr')+';transition:grid-template-rows .55s cubic-bezier(.25,.8,.25,1)">'+
+        '<span aria-hidden="true" style="font-size:24px;font-weight:300;color:var(--accent);line-height:1;flex:none;transition:transform .5s cubic-bezier(.25,.8,.25,1);transform:'+(open?'rotate(45deg)':'rotate(0deg)')+'">+</span>'+
+      '</button>'+
+      '<div id="faq-panel-'+i+'" role="region" aria-labelledby="faq-btn-'+i+'" style="display:grid;grid-template-rows:'+(open?'1fr':'0fr')+';transition:grid-template-rows .55s cubic-bezier(.25,.8,.25,1)">'+
         '<div style="overflow:hidden"><div style="padding:0 20px 18px;font-size:14px;line-height:1.6;color:var(--muted);opacity:'+(open?1:0)+';transition:opacity .45s ease .1s">'+f[1]+'</div></div>'+
       '</div></div>';
   }).join('');
